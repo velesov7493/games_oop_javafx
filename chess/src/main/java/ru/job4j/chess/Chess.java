@@ -38,6 +38,14 @@ public final class Chess extends Application {
         return rect;
     }
 
+    private void showAlert(Rectangle rect, Rectangle momento, String message) {
+        Alert info = new Alert(Alert.AlertType.ERROR);
+        info.setContentText(message);
+        info.show();
+        rect.setX(((int) momento.getX() / 40) * 40 + 5);
+        rect.setY(((int) momento.getY() / 40) * 40 + 5);
+    }
+
     private Rectangle buildFigure(int x, int y, int size, String image) {
         Rectangle rect = new Rectangle();
         rect.setX(x);
@@ -67,12 +75,14 @@ public final class Chess extends Application {
                                 findBy(event.getX(), event.getY()));
                         rect.setX(((int) event.getX() / 40) * 40 + 5);
                         rect.setY(((int) event.getY() / 40) * 40 + 5);
+                    } catch (FigureNotFoundException e) {
+                        showAlert(rect, momento, "Фигуры нет на клетке!" + e.getMessage());
+                    } catch (OccupiedCellException e) {
+                        showAlert(rect, momento, "Ячейка занята!");
+                    } catch (ImpossibleMoveException e) {
+                        showAlert(rect, momento, "Ход не по правилам шахмат: " + e.getMessage());
                     } catch (Exception e) {
-                        Alert info = new Alert(Alert.AlertType.ERROR);
-                        info.setContentText(e.getClass().getName() +  " "  + e.getMessage());
-                        info.show();
-                        rect.setX(((int) momento.getX() / 40) * 40 + 5);
-                        rect.setY(((int) momento.getY() / 40) * 40 + 5);
+                        showAlert(rect, momento, e.getClass().getName() +  " "  + e.getMessage());
                     }
                 }
         );
