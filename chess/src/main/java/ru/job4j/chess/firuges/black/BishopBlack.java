@@ -24,17 +24,16 @@ public class BishopBlack implements Figure {
                 +" Движение из %s в %s неприемлемо.", position, dest
             ));
         }
-        int deltaX = dest.getX() - position.getX();
-        int deltaY = dest.getY() - position.getY();
-        int size = Math.abs(deltaX);
-        Cell[] steps = new Cell[size];
-        deltaX = deltaX / Math.abs(deltaX);
-        deltaY = deltaY / Math.abs(deltaY);
-        for (int index = 0; index < size; index++) {
-            steps[index] = Cell.findBy(
-                position.getX() + (index + 1) * deltaX,
-                position.getY() + (index + 1) * deltaY
-            );
+        int dx = dest.getX() - position.getX();
+        int dy = dest.getY() - position.getY();
+        Cell[] steps = new Cell[Math.abs(dx)];
+        dx = dx > 0 ? 1 : -1;
+        dy = dy > 0 ? 1 : -1;
+        int i = 0;
+        Cell current = position;
+        while (!current.equals(dest)) {
+            current = Cell.findBy(current.getX() + dx, current.getY() + dy);
+            steps[i++] = current;
         }
         return steps;
     }
